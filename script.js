@@ -1,104 +1,137 @@
-// Mapeamento automático de imagens
-function setupImageMapping() {
-    // Mapeamento dos nomes originais para os nomes usados no HTML
-    const imageMap = {
-        // Nome no HTML : Nome real no GitHub
-        'produto-principal.jpg': 'Captura de tela_20260117-013320.jpg',
-        'comparativo.jpg': 'Captura de tela_20260117-013243.jpg',
-        'laminas-fatiar.jpg': 'Captura de tela_20260117-013229.jpg',
-        'laminas-triturar.jpg': 'Captura de tela_20260117-013214.jpg',
-        'laminas-picar.jpg': 'Captura de tela_20260117-013159.jpg',
-        'passo-a-passo.jpg': 'Captura de tela_20260117-013138.jpg',
-        'alimentos-varios.jpg': 'Captura de tela_20260117-013121.jpg'
-    };
-    
-    // Atualiza todas as imagens na página
-    document.querySelectorAll('img').forEach(img => {
-        const src = img.getAttribute('src');
-        
-        // Verifica se é uma imagem da pasta images/
-        if (src && src.startsWith('images/')) {
-            const filename = src.split('/').pop(); // Pega o nome do arquivo
-            const realFilename = imageMap[filename];
-            
-            if (realFilename) {
-                // Atualiza o src com o nome real do arquivo
-                img.src = `images/${realFilename}`;
-                
-                // Adiciona tratamento de erro
-                img.onerror = function() {
-                    console.error(`Imagem não encontrada: ${realFilename}`);
-                    // Pode adicionar uma imagem placeholder aqui
-                };
-            }
-        }
-    });
+// Configuração para InfinitPay
+const INFINITPAY_CONFIG = {
+    apiKey: 'SUA_CHAVE_API_AQUI', // Você vai conseguir na dashboard da InfinitPay
+    productId: 'cortador-multifuncional-2.0',
+    price: 89.90,
+    description: 'Cortador Multifuncional 2.0 + Frete Grátis'
+};
+
+// Elementos DOM
+const modal = document.getElementById('checkoutModal');
+const closeBtn = document.querySelector('.close');
+const buyButtons = document.querySelectorAll('#buyNow, #finalBuy, #infinitPayButton');
+
+// Abrir modal de checkout
+function openCheckoutModal() {
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
 }
 
-// Executa quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
-    setupImageMapping();
-});        }
+// Fechar modal
+function closeModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Iniciar pagamento com InfinitPay
+async function startInfinitPayPayment() {
+    const productData = {
+        name: "Cortador Multifuncional 2.0",
+        price: INFINITPAY_CONFIG.price,
+        quantity: 1,
+        description: INFINITPAY_CONFIG.description,
+        shipping: {
+            free_shipping: true,
+            estimated_delivery: "5-7 dias úteis"
+        }
+    };
+
+    try {
+        // Simulação da API da InfinitPay
+        // Na prática, você usaria algo como:
+        // const response = await fetch('https://api.infinitpay.com.br/checkout', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Authorization': `Bearer ${INFINITPAY_CONFIG.apiKey}`,
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(productData)
+        // });
+        
+        // Para demonstração, vamos simular o redirecionamento
+        showLoading();
+        
+        setTimeout(() => {
+            hideLoading();
+            
+            // Em produção, redirecionaria para o checkout da InfinitPay
+            // window.location.href = response.data.checkout_url;
+            
+            // Para demonstração, mostramos uma mensagem de sucesso
+            alert('🎉 Redirecionando para o pagamento seguro da InfinitPay...\n\nEm produção, você seria redirecionado para o checkout oficial.');
+            
+            closeModal();
+        }, 1500);
+        
+    } catch (error) {
+        console.error('Erro no pagamento:', error);
+        alert('❌ Ocorreu um erro ao processar o pagamento. Tente novamente.');
     }
+}
+
+// Funções de loading
+function showLoading() {
+    const button = document.getElementById('infinitPayButton');
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSANDO...';
+    button.disabled = true;
+    
+    // Restaurar depois de 3 segundos
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }, 3000);
+}
+
+function hideLoading() {
+    const button = document.getElementById('infinitPayButton');
+    button.innerHTML = '<i class="fas fa-check"></i> PAGAMENTO PROCESSADO!';
 }
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
     // Configurar botões de compra
-    buyNowButtons.forEach(button => {
-        button.addEventListener('click', buyNow);
+    buyButtons.forEach(button => {
+        if (button.id !== 'infinitPayButton') {
+            button.addEventListener('click', openCheckoutModal);
+        }
     });
     
-    // Configurar botão do carrinho
-    if (addToCartButton) {
-        addToCartButton.addEventListener('click', addToCart);
+    // Botão de pagamento InfinitPay
+    const infinitPayButton = document.getElementById('infinitPayButton');
+    if (infinitPayButton) {
+        infinitPayButton.addEventListener('click', startInfinitPayPayment);
     }
     
-    // Configurar botão do chat
-    const chatButton = document.querySelector('.btn-chat');
-    if (chatButton) {
-        chatButton.addEventListener('click', openChat);
-    }
+    // Fechar modal
+    closeBtn.addEventListener('click', closeModal);
     
-    // Atualizar contador de estoque
-    updateStockCounter();
-    
-    // Atualizar a cada 30 segundos
-    setInterval(updateStockCounter, 30000);
-    
-    // Efeito de contagem regressiva para oferta
-    function updateCountdown() {
-        const now = new Date();
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(23, 59, 59, 999);
-        
-        const diff = tomorrow - now;
-        
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        
-        const offerBanner = document.querySelector('.offer-banner');
-        if (offerBanner) {
-            offerBanner.innerHTML = `🔥 OFERTA RELÂMPAGO: <strong>R$ 89,90</strong> | Termina em: ${hours}h ${minutes}m ${seconds}s | Frete Grátis`;
+    // Fechar modal clicando fora
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            closeModal();
         }
-    }
+    });
     
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
+    // Configurar PIX com desconto
+    setupPixDiscount();
+    
+    // Contador de estoque
+    updateStockCounter();
 });
 
-// Smooth scroll para links internos
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+// Configurar desconto PIX
+function setupPixDiscount() {
+    const pixPrice = (INFINITPAY_CONFIG.price * 0.95).toFixed(2); // 5% desconto
+    console.log(`💰 Preço com PIX (5% off): R$ ${pixPrice}`);
+}
+
+// Atualizar contador de estoque
+function updateStockCounter() {
+    // Simulação de estoque baixo
+    const stockElements = document.querySelectorAll('.stock-text');
+    stockElements.forEach(el => {
+        const stock = Math.floor(Math.random() * 5) + 3;
+        el.textContent = `Apenas ${stock} unidades disponíveis`;
     });
-});
+}
