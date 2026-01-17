@@ -1,117 +1,44 @@
-// Simulação de carrinho de compras
-let cartCount = 0;
-
-// Elementos DOM
-const buyNowButtons = document.querySelectorAll('#buyNow, #finalBuy');
-const addToCartButton = document.getElementById('addToCart');
-const cartButton = document.querySelector('.btn-cart');
-
-// Função para formatar preço
-function formatPrice(price) {
-    return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-    }).format(price);
-}
-
-// Função para comprar agora
-function buyNow() {
-    const productName = "Cortador Multifuncional 2.0";
-    const price = 89.90;
+// Mapeamento automático de imagens
+function setupImageMapping() {
+    // Mapeamento dos nomes originais para os nomes usados no HTML
+    const imageMap = {
+        // Nome no HTML : Nome real no GitHub
+        'produto-principal.jpg': 'Captura de tela_20260117-013320.jpg',
+        'comparativo.jpg': 'Captura de tela_20260117-013243.jpg',
+        'laminas-fatiar.jpg': 'Captura de tela_20260117-013229.jpg',
+        'laminas-triturar.jpg': 'Captura de tela_20260117-013214.jpg',
+        'laminas-picar.jpg': 'Captura de tela_20260117-013159.jpg',
+        'passo-a-passo.jpg': 'Captura de tela_20260117-013138.jpg',
+        'alimentos-varios.jpg': 'Captura de tela_20260117-013121.jpg'
+    };
     
-    alert(`🎉 Ótima escolha! Você está comprando:\n\n${productName}\n\nPreço: ${formatPrice(price)}\n\nRedirecionando para checkout...`);
-    
-    // Aqui você integraria com sua plataforma de pagamento
-    // Exemplo: window.location.href = "https://seu-checkout.com";
-}
-
-// Função para adicionar ao carrinho
-function addToCart() {
-    cartCount++;
-    
-    // Atualizar botão do carrinho
-    if (cartButton) {
-        cartButton.innerHTML = `<i class="fas fa-shopping-cart"></i> Carrinho (${cartCount})`;
-    }
-    
-    // Mostrar confirmação
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #2ecc71;
-        color: white;
-        padding: 15px 25px;
-        border-radius: 5px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        z-index: 10000;
-        animation: slideIn 0.3s ease;
-    `;
-    
-    notification.innerHTML = `
-        <strong>🎉 Produto adicionado!</strong>
-        <p>Cortador Multifuncional 2.0</p>
-        <p>Total no carrinho: ${cartCount} item(s)</p>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Remover notificação após 3 segundos
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
-
-// Função para abrir chat
-function openChat() {
-    alert("💬 Chat de atendimento\n\nEm breve você será atendido por nosso time de vendas!\n\nEnquanto isso, pode nos chamar no WhatsApp: (11) 99999-9999");
-}
-
-// Adicionar animação CSS para notificações
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Contador de estoque (simulação)
-function updateStockCounter() {
-    const stockElement = document.querySelector('.stock-counter p');
-    if (stockElement) {
-        // Simular diminuição gradual do estoque
-        let stock = 12;
-        const sold = Math.floor(Math.random() * 3); // 0-2 vendas a cada visita
-        stock = Math.max(1, stock - sold);
+    // Atualiza todas as imagens na página
+    document.querySelectorAll('img').forEach(img => {
+        const src = img.getAttribute('src');
         
-        stockElement.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Apenas ${stock} unidades em estoque!`;
-        
-        const progress = document.querySelector('.progress');
-        if (progress) {
-            const percentage = (stock / 12) * 100;
-            progress.style.width = `${percentage}%`;
+        // Verifica se é uma imagem da pasta images/
+        if (src && src.startsWith('images/')) {
+            const filename = src.split('/').pop(); // Pega o nome do arquivo
+            const realFilename = imageMap[filename];
+            
+            if (realFilename) {
+                // Atualiza o src com o nome real do arquivo
+                img.src = `images/${realFilename}`;
+                
+                // Adiciona tratamento de erro
+                img.onerror = function() {
+                    console.error(`Imagem não encontrada: ${realFilename}`);
+                    // Pode adicionar uma imagem placeholder aqui
+                };
+            }
         }
+    });
+}
+
+// Executa quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    setupImageMapping();
+});        }
     }
 }
 
