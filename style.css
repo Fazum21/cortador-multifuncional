@@ -1,112 +1,186 @@
-/* Reset e Configurações Gerais */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* Novos Estilos para Frete Grátis e InfinitPay */
 
-body {
-    font-family: 'Poppins', sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f9f9f9;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-/* Banner de Oferta */
-.offer-banner {
-    background: linear-gradient(90deg, #e74c3c, #c0392b);
+/* Selo Frete Grátis */
+.free-shipping-badge {
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
     color: white;
-    text-align: center;
-    padding: 10px;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-/* Header */
-header {
-    background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    padding: 15px 0;
-}
-
-header .container {
-    display: flex;
-    justify-content: space-between;
+    padding: 12px 20px;
+    border-radius: 30px;
+    display: inline-flex;
     align-items: center;
-}
-
-.logo h1 {
-    color: #2c3e50;
-    font-size: 24px;
-    margin-bottom: 5px;
-}
-
-.logo p {
-    color: #7f8c8d;
-    font-size: 14px;
-}
-
-.header-buttons {
-    display: flex;
     gap: 10px;
-}
-
-.btn-chat, .btn-cart {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+    margin: 15px 0;
     font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
 }
 
-.btn-chat {
-    background: #3498db;
-    color: white;
+/* Métodos de Pagamento */
+.payment-methods {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px 0;
 }
 
-.btn-cart {
-    background: #2ecc71;
-    color: white;
+.payment-icons {
+    display: flex;
+    gap: 15px;
+    font-size: 24px;
+    margin-top: 10px;
 }
 
-/* Hero Section */
-.hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+/* Seção de Pagamento Seguro */
+.payment-section {
+    background: #f8f9fa;
     padding: 60px 0;
 }
 
-.hero .container {
+.payment-security {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 50px;
+    gap: 40px;
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.security-badges {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.badge {
+    background: #e8f5e9;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: flex;
     align-items: center;
+    gap: 8px;
+    color: #2ecc71;
+    font-weight: 500;
 }
 
-.hero h2 {
-    font-size: 20px;
-    font-weight: 400;
-    margin-bottom: 10px;
-    opacity: 0.9;
+.payment-options {
+    border-left: 2px solid #eee;
+    padding-left: 30px;
 }
 
-.hero h1 {
-    font-size: 42px;
-    margin-bottom: 15px;
-    line-height: 1.2;
+.payment-list p {
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.subtitle {
+/* Destaque Frete Grátis no CTA */
+.shipping-free {
+    background: #2ecc71;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin: 10px 0;
+    display: inline-block;
+}
+
+/* Modal de Checkout */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 10000;
+}
+
+.modal-content {
+    background: white;
+    margin: 5% auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 15px;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #777;
+}
+
+.product-summary {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 2px solid #eee;
+}
+
+.product-summary img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.total {
+    text-align: center;
+    font-size: 24px;
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.btn-pay {
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 10px;
     font-size: 18px;
-    margin-bottom: 30px;
-    opacity: 0.9;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.security-note {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Responsividade para Seção de Pagamento */
+@media (max-width: 768px) {
+    .payment-security {
+        grid-template-columns: 1fr;
+    }
+    
+    .payment-options {
+        border-left: none;
+        border-top: 2px solid #eee;
+        padding-left: 0;
+        padding-top: 30px;
+    }
+    
+    .security-badges {
+        flex-wrap: wrap;
+    }
+}    opacity: 0.9;
 }
 
 .price-section {
